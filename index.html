@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Good Morning Kai - Morning Routine</title>
+    <title>Morning Routine</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏰</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,31 +15,20 @@
     <div id="wake-status" style="display: none;"></div>
 
     <div id="main-container">
-        <div id="left-column">
-            <div id="routine-list"></div>
+        <div id="left-column" class="routine-column">
+            <h2 class="routine-title">Kai</h2>
+            <div id="routine-list" class="routine-list"></div>
+            <button class="add-item-btn" data-target="routine-list">Add New Item</button>
         </div>
 
-        <div id="right-column">
-            <h1>Good Morning Kai</h1>
-            <div id="clock"></div>
-
-            <div id="joke-container">
-                <h3>Joke of the Day</h3>
-                <p id="joke-text">Loading joke...</p>
-            </div>
-
-            <div id="trivia-container">
-                <h3>Trivia Question</h3>
-                <p id="trivia-question">Loading trivia...</p>
-                <p id="trivia-answer" style="display: none;"></p>
-            </div>
-
-            <div style="display:none" id="time-controls">
-                <input type="text" id="time-input" placeholder="HH:MM:SS">
-                <button onclick="setCustomTime()">Set Time</button>
-            </div>
+        <div id="right-column" class="routine-column">
+            <h2 class="routine-title">Celeste</h2>
+            <div id="routine-list-celeste" class="routine-list"></div>
+            <button class="add-item-btn" data-target="routine-list-celeste">Add New Item</button>
         </div>
     </div>
+
+    <canvas id="fireworks-canvas"></canvas>
 
     <script src="app.js"></script>
 </body>

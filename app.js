@@ -1,212 +1,187 @@
-// Time offset tracking
-let timeOffset = 0; // milliseconds to offset from real time
-let routineData = null; // store routine data for highlighting
+const routineCheckboxCounters = {};
 
-// Update clock every second
-function updateClock() {
-    const now = new Date(Date.now() + timeOffset);
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+function appendRoutineItem(listId, activity, icon = '⭐️') {
+    const routineList = document.getElementById(listId);
+    if (!routineList || !activity) return;
 
-    // Update highlight
-    highlightCurrentActivity();
-
-    // Update trivia answer visibility
-    updateTriviaAnswer();
-}
-
-// Convert time string (e.g., "7:05 AM") to minutes since midnight
-function timeToMinutes(timeStr) {
-    const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-    if (!match) return 0;
-
-    let hours = parseInt(match[1]);
-    const minutes = parseInt(match[2]);
-    const period = match[3].toUpperCase();
-
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
-
-    return hours * 60 + minutes;
-}
-
-// Highlight the current activity based on time
-function highlightCurrentActivity() {
-    if (!routineData) return;
-
-    const now = new Date(Date.now() + timeOffset);
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-    const items = document.querySelectorAll('#routine-list > div');
-
-    // Find which activity we're currently in
-    let activeIndex = -1;
-    for (let i = 0; i < routineData.morningRoutine.length; i++) {
-        const itemMinutes = timeToMinutes(routineData.morningRoutine[i].time);
-        const nextItemMinutes = i < routineData.morningRoutine.length - 1
-            ? timeToMinutes(routineData.morningRoutine[i + 1].time)
-            : 24 * 60; // End of day
-
-        if (currentMinutes >= itemMinutes && currentMinutes < nextItemMinutes) {
-            activeIndex = i;
-            break;
-        }
+    if (!routineCheckboxCounters[listId]) {
+        routineCheckboxCounters[listId] = 0;
     }
 
-    // Update highlighting and completion status
-    items.forEach((item, index) => {
-        const nextItemMinutes = index < routineData.morningRoutine.length - 1
-            ? timeToMinutes(routineData.morningRoutine[index + 1].time)
-            : 24 * 60;
+    const checkboxId = `${listId}-checkbox-${routineCheckboxCounters[listId]++}`;
+    const itemDiv = document.createElement('div');
+    itemDiv.innerHTML = `
+        <label class="routine-entry" for="${checkboxId}">
+            <input type="checkbox" id="${checkboxId}">
+            <span class="icon">${icon || '⭐️'}</span>
+            <span class="activity">${activity}</span>
+        </label>
+    `;
+    routineList.appendChild(itemDiv);
 
-        const isPast = currentMinutes >= nextItemMinutes;
-        const isCurrent = index === activeIndex;
-
-        const paragraph = item.querySelector('p');
-
-        // Remove all state classes
-        item.classList.remove('current', 'completed', 'future');
-
-        if (isCurrent) {
-            // Current activity - highlight
-            item.classList.add('current');
-
-            // Remove checkmark if present
-            if (paragraph && paragraph.textContent.includes('✓')) {
-                paragraph.innerHTML = paragraph.innerHTML.replace('✓ ', '');
-            }
-        } else if (isPast) {
-            // Past activity - grey out and add checkmark
-            item.classList.add('completed');
-
-            // Add checkmark if not already present
-            if (paragraph && !paragraph.textContent.includes('✓')) {
-                paragraph.innerHTML = '✓ ' + paragraph.innerHTML;
-            }
-        } else {
-            // Future activity - normal
-            item.classList.add('future');
-
-            // Remove checkmark if present
-            if (paragraph && paragraph.textContent.includes('✓')) {
-                paragraph.innerHTML = paragraph.innerHTML.replace('✓ ', '');
-            }
-        }
-    });
-}
-
-// Set custom time
-function setCustomTime() {
-    const input = document.getElementById('time-input').value;
-    const match = input.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
-
-    if (match) {
-        const [, hours, minutes, seconds] = match;
-        const customTime = new Date();
-        customTime.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds), 0);
-
-        const realTime = new Date();
-        timeOffset = customTime - realTime;
-
-        updateClock();
+    const checkbox = itemDiv.querySelector('input[type="checkbox"]');
+    if (checkbox) {
+        checkbox.addEventListener('change', evaluateCompletion);
     }
 }
 
-// Fetch joke of the day
-function fetchJoke() {
-    fetch('https://icanhazdadjoke.com/', {
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('joke-text').textContent = data.joke;
-    })
-    .catch(error => {
-        console.error('Error fetching joke:', error);
-        document.getElementById('joke-text').textContent = 'Could not load joke. Try again later!';
-    });
-}
+function renderRoutine(listId, dataPath) {
+    return fetch(dataPath)
+        .then(response => response.json())
+        .then(data => {
+            const routineList = document.getElementById(listId);
+            if (!routineList) return;
 
-// Fetch trivia question
-let triviaAnswer = '';
+            data.morningRoutine.forEach(item => {
+                appendRoutineItem(listId, item.activity, item.icon);
+            });
+        })
+        .catch(error => {
+            console.error(`Error loading routine from ${dataPath}:`, error);
+            const routineList = document.getElementById(listId);
+            if (routineList) {
+                routineList.innerHTML = '<p>Error loading routine</p>';
+            }
 
-function fetchTrivia() {
-    fetch('https://opentdb.com/api.php?amount=1&category=9&difficulty=easy')
-    .then(response => response.json())
-    .then(data => {
-        if (data.results && data.results.length > 0) {
-            const question = data.results[0];
-            // Decode HTML entities
-            const parser = new DOMParser();
-            const decodedQuestion = parser.parseFromString(question.question, 'text/html').body.textContent;
-            const decodedAnswer = parser.parseFromString(question.correct_answer, 'text/html').body.textContent;
-
-            document.getElementById('trivia-question').textContent = decodedQuestion;
-            triviaAnswer = decodedAnswer;
-
-            // Check if we should show the answer
-            updateTriviaAnswer();
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching trivia:', error);
-        document.getElementById('trivia-question').textContent = 'Could not load trivia. Try again later!';
-    });
-}
-
-// Update trivia answer visibility based on time
-function updateTriviaAnswer() {
-    const now = new Date(Date.now() + timeOffset);
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    const showAnswerTime = 7 * 60 + 20; // 7:20 AM
-
-    const answerElement = document.getElementById('trivia-answer');
-    if (currentMinutes >= showAnswerTime && triviaAnswer) {
-        answerElement.textContent = `Answer: ${triviaAnswer}`;
-        answerElement.style.display = 'block';
-    } else {
-        answerElement.style.display = 'none';
-    }
-}
-
-// Start the clock
-updateClock();
-setInterval(updateClock, 1000);
-
-// Fetch joke and trivia on load
-fetchJoke();
-fetchTrivia();
-
-// Fetch and display the morning routine
-fetch('morning-routine.json')
-    .then(response => response.json())
-    .then(data => {
-        routineData = data; // Store for highlighting
-        const routineList = document.getElementById('routine-list');
-
-        data.morningRoutine.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.innerHTML = `
-                <p>
-                    <strong>${item.time}</strong>
-                    <span class="icon">${item.icon}</span>
-                    ${item.activity}
-                </p>
-            `;
-            routineList.appendChild(itemDiv);
+            throw error;
         });
+}
 
-        // Initial highlight
-        highlightCurrentActivity();
-    })
-    .catch(error => {
-        console.error('Error loading routine:', error);
-        document.getElementById('routine-list').innerHTML = '<p>Error loading routine</p>';
+const routinePromises = [
+    renderRoutine('routine-list', 'morning-routine.json'),
+    renderRoutine('routine-list-celeste', 'morning-routine Celeste.json')
+];
+
+Promise.allSettled(routinePromises).then(() => {
+    evaluateCompletion();
+});
+
+setupAddItemButtons();
+
+function setupAddItemButtons() {
+    const buttons = document.querySelectorAll('.add-item-btn');
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const listId = button.dataset.target;
+            if (!listId) return;
+
+            const newActivity = prompt('Enter a new routine item:');
+            if (!newActivity) return;
+
+            const trimmedActivity = newActivity.trim();
+            if (!trimmedActivity) return;
+
+            appendRoutineItem(listId, trimmedActivity, '⭐️');
+            evaluateCompletion();
+        });
     });
+}
+
+function evaluateCompletion() {
+    const checkboxes = document.querySelectorAll('.routine-entry input[type="checkbox"]');
+    if (!checkboxes.length) return;
+
+    const allChecked = Array.from(checkboxes).every(box => box.checked);
+    if (allChecked) {
+        startFireworks();
+    } else {
+        stopFireworks();
+    }
+}
+
+const fireworksCanvas = document.getElementById('fireworks-canvas');
+const fireworksCtx = fireworksCanvas ? fireworksCanvas.getContext('2d') : null;
+let fireworksParticles = [];
+let fireworksAnimationId = null;
+let fireworksActive = false;
+
+function resizeFireworksCanvas() {
+    if (!fireworksCanvas) return;
+    fireworksCanvas.width = window.innerWidth;
+    fireworksCanvas.height = window.innerHeight;
+}
+
+function createFireworkBurst() {
+    if (!fireworksCanvas) return;
+
+    const x = Math.random() * fireworksCanvas.width;
+    const y = Math.random() * fireworksCanvas.height * 0.6;
+    const color = `hsl(${Math.floor(Math.random() * 360)}, 80%, 60%)`;
+    const particleCount = 30 + Math.floor(Math.random() * 20);
+
+    for (let i = 0; i < particleCount; i++) {
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const speed = Math.random() * 4 + 2;
+
+        fireworksParticles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            color,
+            decay: Math.random() * 0.02 + 0.005
+        });
+    }
+}
+
+function animateFireworks() {
+    if (!fireworksCtx || !fireworksActive) return;
+
+    fireworksAnimationId = requestAnimationFrame(animateFireworks);
+    fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+    if (fireworksParticles.length < 200 && Math.random() < 0.2) {
+        createFireworkBurst();
+    }
+
+    fireworksParticles.forEach(particle => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.vy += 0.02;
+        particle.alpha -= particle.decay;
+    });
+
+    fireworksParticles = fireworksParticles.filter(p => p.alpha > 0);
+
+    fireworksParticles.forEach(particle => {
+        fireworksCtx.globalAlpha = Math.max(particle.alpha, 0);
+        fireworksCtx.fillStyle = particle.color;
+        fireworksCtx.beginPath();
+        fireworksCtx.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
+        fireworksCtx.fill();
+    });
+
+    fireworksCtx.globalAlpha = 1;
+}
+
+function startFireworks() {
+    if (!fireworksCanvas || fireworksActive) return;
+    fireworksActive = true;
+    fireworksCanvas.classList.add('active');
+    resizeFireworksCanvas();
+    window.addEventListener('resize', resizeFireworksCanvas);
+    fireworksParticles = [];
+    animateFireworks();
+}
+
+function stopFireworks() {
+    if (!fireworksCanvas) return;
+    fireworksActive = false;
+    fireworksCanvas.classList.remove('active');
+    window.removeEventListener('resize', resizeFireworksCanvas);
+
+    if (fireworksAnimationId) {
+        cancelAnimationFrame(fireworksAnimationId);
+        fireworksAnimationId = null;
+    }
+
+    if (fireworksCtx) {
+        fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+    }
+
+    fireworksParticles = [];
+}
 
 // Keep screen awake on iPad
 let wakeLock = null;

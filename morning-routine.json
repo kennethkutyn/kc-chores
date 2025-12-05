@@ -2,58 +2,53 @@
   "morningRoutine": [
     {
       "time": "7:00 AM",
-      "activity": "Wake Up",
-      "icon": "⏰"
+      "activity": "Drums",
+      "icon": "🥁"
     },
     {
       "time": "7:05 AM",
-      "activity": "Turn off AC & Fan",
-      "icon": "❄️"
+      "activity": "Dusting",
+      "icon": "🧹"
     },
     {
       "time": "7:06 AM",
-      "activity": "Make Bed",
-      "icon": "🛏️"
+      "activity": "Mini Bin",
+      "icon": "🗑️"
     },
     {
       "time": "7:07 AM",
-      "activity": "Get Dressed",
-      "icon": "👕"
+      "activity": "Toilet Paper",
+      "icon": "🧻"
     },
     {
       "time": "7:09 AM",
-      "activity": "Brush Hair",
-      "icon": "🪮"
+      "activity": "Tidy Room",
+      "icon": "🧽"
     },
     {
       "time": "7:10 AM",
-      "activity": "Eat Breakfast",
-      "icon": "🍲"
+      "activity": "Seesaw homework",
+      "icon": "📝"
     },
     {
       "time": "7:25 AM",
-      "activity": "Wash Dishes",
-      "icon": "🥣"
+      "activity": "Reading",
+      "icon": "📚"
     },
     {
       "time": "7:27 AM",
-      "activity": "Brush Teeth",
-      "icon": "🪥"
+      "activity": "French Homework",
+      "icon": "🇫🇷"
     },
     {
       "time": "7:30 AM",
-      "activity": "Use the Toilet",
-      "icon": "🚽"
+      "activity": "Atoms",
+      "icon": "⚛️"
     },
     {
       "time": "7:33 AM",
-      "activity": "Put on Shoes",
-      "icon": "👟"
-    },
-    {
-      "time": "7:35 AM",
-      "activity": "Leave for School",
-      "icon": "🚌"
+      "activity": "Find a job to do",
+      "icon": "💪"
     }
   ]
 }

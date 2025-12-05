@@ -1,0 +1,34 @@
+{
+  "morningRoutine": [
+    {
+      "time": "7:00 AM",
+      "activity": "Water Plants Indoors",
+      "icon": "🪴"
+    },
+    {
+      "time": "7:05 AM",
+      "activity": "Water Plants Outdoors",
+      "icon": "🌻"
+    },
+    {
+      "time": "7:06 AM",
+      "activity": "Make Bed",
+      "icon": "🛌"
+    },
+    {
+      "time": "7:07 AM",
+      "activity": "Tidy Room",
+      "icon": "🧹"
+    },
+    {
+      "time": "7:09 AM",
+      "activity": "Dust Room",
+      "icon": "🧽"
+    },
+    {
+      "time": "7:09 AM",
+      "activity": "Find a job to do",
+      "icon": "💪"
+    }
+  ]
+}
