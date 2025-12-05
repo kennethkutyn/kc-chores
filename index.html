@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Morning Kai - Morning Routine</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏰</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <video id="keep-awake-video" playsinline muted loop autoplay style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></video>
+    <div id="wake-status" style="display: none;"></div>
+
+    <div id="main-container">
+        <div id="left-column">
+            <div id="routine-list"></div>
+        </div>
+
+        <div id="right-column">
+            <h1>Good Morning Kai</h1>
+            <div id="clock"></div>
+
+            <div id="joke-container">
+                <h3>Joke of the Day</h3>
+                <p id="joke-text">Loading joke...</p>
+            </div>
+
+            <div id="trivia-container">
+                <h3>Trivia Question</h3>
+                <p id="trivia-question">Loading trivia...</p>
+                <p id="trivia-answer" style="display: none;"></p>
+            </div>
+
+            <div style="display:none" id="time-controls">
+                <input type="text" id="time-input" placeholder="HH:MM:SS">
+                <button onclick="setCustomTime()">Set Time</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

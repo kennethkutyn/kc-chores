@@ -1,0 +1,59 @@
+{
+  "morningRoutine": [
+    {
+      "time": "7:00 AM",
+      "activity": "Wake Up",
+      "icon": "⏰"
+    },
+    {
+      "time": "7:05 AM",
+      "activity": "Turn off AC & Fan",
+      "icon": "❄️"
+    },
+    {
+      "time": "7:06 AM",
+      "activity": "Make Bed",
+      "icon": "🛏️"
+    },
+    {
+      "time": "7:07 AM",
+      "activity": "Get Dressed",
+      "icon": "👕"
+    },
+    {
+      "time": "7:09 AM",
+      "activity": "Brush Hair",
+      "icon": "🪮"
+    },
+    {
+      "time": "7:10 AM",
+      "activity": "Eat Breakfast",
+      "icon": "🍲"
+    },
+    {
+      "time": "7:25 AM",
+      "activity": "Wash Dishes",
+      "icon": "🥣"
+    },
+    {
+      "time": "7:27 AM",
+      "activity": "Brush Teeth",
+      "icon": "🪥"
+    },
+    {
+      "time": "7:30 AM",
+      "activity": "Use the Toilet",
+      "icon": "🚽"
+    },
+    {
+      "time": "7:33 AM",
+      "activity": "Put on Shoes",
+      "icon": "👟"
+    },
+    {
+      "time": "7:35 AM",
+      "activity": "Leave for School",
+      "icon": "🚌"
+    }
+  ]
+}

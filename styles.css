@@ -1,0 +1,222 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: linear-gradient(135deg, #e79129 0%, #764ba2 100%);
+    color: #2d3748;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+#main-container {
+    display: flex;
+    height: 100vh;
+    padding: 2vh 3vw;
+    gap: 3vw;
+}
+
+#left-column {
+    flex: 1 1 65%;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+#right-column {
+    flex: 0 0 auto;
+    min-width: 400px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3vh;
+    padding-left: 3vw;
+}
+
+#clock {
+    font-size: clamp(48px, 5vw, 96px);
+    font-weight: bold;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2vh 3vw;
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    font-family: 'Mochiy Pop One', sans-serif;
+    letter-spacing: 3px;
+}
+
+#joke-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2vh 2vw;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    text-align: center;
+}
+
+#joke-container h3 {
+    font-size: clamp(20px, 2vw, 28px);
+    color: #667eea;
+    margin: 0 0 1vh 0;
+    font-weight: bold;
+}
+
+#joke-container p {
+    font-size: clamp(16px, 1.5vw, 22px);
+    color: #2d3748;
+    margin: 0;
+    line-height: 1.5;
+}
+
+#trivia-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2vh 2vw;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    text-align: center;
+}
+
+#trivia-container h3 {
+    font-size: clamp(20px, 2vw, 28px);
+    color: #667eea;
+    margin: 0 0 1vh 0;
+    font-weight: bold;
+}
+
+#trivia-container p {
+    font-size: clamp(16px, 1.5vw, 22px);
+    color: #2d3748;
+    margin: 0;
+    line-height: 1.5;
+}
+
+#trivia-answer {
+    margin-top: 1vh;
+    padding-top: 1vh;
+    border-top: 2px solid #667eea;
+    font-weight: bold;
+    color: #48bb78;
+}
+
+#time-controls {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#time-input {
+    font-size: 24px;
+    padding: 10px 15px;
+    border: 3px solid #667eea;
+    border-radius: 10px;
+    width: 180px;
+    font-family: 'Arial', sans-serif;
+}
+
+#time-controls button {
+    font-size: 24px;
+    padding: 10px 25px;
+    background: #48bb78;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+    transition: background 0.3s;
+}
+
+#time-controls button:hover {
+    background: #38a169;
+}
+
+h1 {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: clamp(32px, 4vw, 56px);
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    font-size: 32px;
+    color: #f7fafc;
+    text-align: center;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#routine-list {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 1vh;
+    padding: 1vh 0;
+}
+
+#routine-list > div {
+    background: white;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+}
+
+#routine-list > div p {
+    font-size: clamp(18px, 1.8vh, 32px);
+    padding: 1vh 2vw;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.5vw;
+    width: 100%;
+}
+
+#routine-list > div p strong {
+    color: #667eea;
+    min-width: clamp(80px, 8vw, 150px);
+}
+
+#routine-list > div p .icon {
+    font-size: clamp(24px, 2.5vh, 40px);
+}
+
+/* Current activity highlight */
+#routine-list > div.current {
+    background: #fff9e6 !important;
+    border: 6px solid #ff9800;
+    box-shadow: 0 12px 40px rgba(255, 152, 0, 0.6);
+    transform: scale(1.1);
+}
+
+/* Completed activity */
+#routine-list > div.completed {
+    background: #f7fafc;
+    opacity: 0.7;
+}
+
+#routine-list > div.completed p {
+    color: #a0aec0;
+}
+
+/* Future activity */
+#routine-list > div.future {
+    background: white;
+}
